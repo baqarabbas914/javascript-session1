@@ -112,3 +112,45 @@ const p = /[0-9]/g;
 let resul = t.match(p);
 
 console.log(resul);
+
+// Email Validation using Regular Expressions
+
+function validateEmail(email) {
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9,-]+\.[a-zA-Z]{2,}$/;
+  return emailPattern.test(email);
+}
+
+console.log(
+  "Email Validation Results for test@example.com:",
+  validateEmail("test@example.com"),
+);
+
+console.log(
+  "Email Validation Results for invalid-email:",
+  validateEmail("invalid-email"),
+);
+
+console.log(
+  "Email Validation Results for test@example:",
+  validateEmail("test@example"),
+);
+
+// Password Strength Checker using Regular Expressions
+
+function checkPassword(password) {
+  const hasLower = /[a-z]/.test(password);
+  const hasUpper = /[A-Z]/.test(password);
+  const hasDigit = /\d/.test(password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  const isLongEnough = password.length >= 8;
+  return {
+    hasLower,
+    hasUpper,
+    hasDigit,
+    hasSpecial,
+    isLongEnough,
+    isValid: hasLower && hasUpper && hasDigit && hasSpecial && isLongEnough,
+  };
+}
+console.log("Password Check Results for Abcdef1!:", checkPassword("Abcdef1!"));
+console.log("Password Check Results for weakpass:", checkPassword("weakpass"));
