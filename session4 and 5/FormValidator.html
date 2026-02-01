@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <!-- Implement Form Validator through JavaScript -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>Registration Form</h2>
+
+    <div>
+      <label for="email"> Email: </label>
+      <input type="text" id="email" name="email" />
+      <span id="emailError" style="color: red"></span>
+    </div>
+
+    <div>
+      <label for="phone"> Phone Number (0300-1234567): </label>
+      <input type="text" id="phone" name="phone" />
+      <span id="phoneError" style="color: red"></span>
+    </div>
+
+    <div>
+      <label for="password">
+        Password (min 8 chars, mix of letters & numbers):
+      </label>
+      <input type="text" id="password" name="password" />
+      <span id="passwordError" style="color: red"></span>
+    </div>
+
+    <button onclick="validateForm()">Submit</button>
+
+    <script>
+      function validateForm() {
+        // Clear previous error messages
+        document.getElementById("emailError").innerText = "";
+        document.getElementById("phoneError").innerText = "";
+        document.getElementById("passwordError").innerText = "";
+
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("password").value;
+
+        let isValid = true;
+
+        // Email validation
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(email)) {
+          document.getElementById("emailError").textContent =
+            " Invalid email format.";
+          isValid = false;
+        } else {
+          document.getElementById("emailError").textContent = "";
+        }
+
+        // Phone number validation
+        const phonePattern = /^03\d{2}-\d{7}$/;
+        if (!phonePattern.test(phone)) {
+          document.getElementById("phoneError").textContent =
+            " Invalid phone number format.";
+          isValid = false;
+        } else {
+          document.getElementById("phoneError").textContent = "";
+        }
+
+        // Password validation
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if (!passwordPattern.test(password)) {
+          document.getElementById("passwordError").textContent =
+            " Password must be at least 8 characters long and contain both letters and numbers.";
+          isValid = false;
+        } else {
+          document.getElementById("passwordError").textContent = "";
+        }
+      }
+    </script>
+  </body>
+</html>
