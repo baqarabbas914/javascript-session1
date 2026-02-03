@@ -122,4 +122,67 @@ const prevSibling = element.previousElementSibling;
 // Closest ancestor matching selector
 const closestDiv = element.closest('div.ancestor');
 
+3. CREATING & INSERTING ELEMENTS
 
+// Create element
+const newDiv = document.createElement('div');
+newDiv.className = 'alert';
+newDiv.id = 'alert1';
+
+// Create text node
+const text = document.createTextNode('Hello World');
+
+// Append methods
+parent.appendChild(newDiv); // End of parent
+parent.prepend(newDiv); // Beginning of parent
+parent.insertBefore(newDiv, referenceElement); // Before specific child
+
+// Insert adjacent HTML
+element.insertAdjacentHTML('beforebegin', '<div>Before</div>');
+element.insertAdjacentHTML('afterbegin', '<div>After Start</div>');
+element.insertAdjacentHTML('beforeend', '<div>Before End</div>');
+element.insertAdjacentHTML('afterend', '<div>After</div>');
+
+// Clone element
+const cloned = element.cloneNode(true); // true = deep clone
+
+4. MODIFYING ELEMENTS
+
+// Content manipulation
+element.innerHTML = '<strong>Bold</strong> text'; // Parses HTML
+element.textContent = 'Plain text only'; // Safer, no HTML parsing
+element.innerText = 'Considers styling'; // Aware of CSS
+
+// Attributes
+element.setAttribute('data-custom', 'value');
+const value = element.getAttribute('data-custom');
+element.removeAttribute('data-custom');
+element.hasAttribute('data-custom'); // boolean
+
+// Classes
+element.classList.add('new-class', 'another-class');
+element.classList.remove('old-class');
+element.classList.toggle('active'); // Add/remove
+element.classList.contains('active'); // boolean
+element.className = 'class1 class2'; // Direct string
+
+// Styles
+element.style.color = 'red';
+element.style.backgroundColor = '#fff';
+element.style.cssText = 'color: red; background: blue;'; // Multiple
+const computed = getComputedStyle(element); // All computed styles
+
+5. REMOVING ELEMENTS
+
+// Remove element itself
+element.remove();
+
+// Remove from parent
+parent.removeChild(element);
+
+// Clear all children
+while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+}
+// OR
+parent.innerHTML = '';
