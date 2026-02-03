@@ -89,3 +89,37 @@ Add new rooms (create elements)
 Remove walls (delete elements)
 
 Pro Tip: Open your browser's Developer Tools (F12) and type document in the console to explore the live DOM of any webpage!
+
+Comprehensive DOM Manipulation Guide
+Essential DOM Methods & Properties
+1. SELECTION METHODS
+
+// Single element selectors
+const el = document.getElementById('myId');
+const el = document.querySelector('.myClass'); // CSS selector
+const el = document.querySelector('div > p.special');
+
+// Multiple elements
+const list = document.getElementsByClassName('item'); // HTMLCollection
+const list = document.getElementsByTagName('div'); // HTMLCollection
+const list = document.querySelectorAll('.item'); // NodeList (static!)
+
+// Special selectors
+const forms = document.forms; // All forms
+const images = document.images; // All images
+const links = document.links; // All links
+
+2. TRAVERSING THE DOM TREE
+
+const parent = element.parentElement;
+const children = element.children; // Element children only
+const allChildren = element.childNodes; // Includes text nodes
+const firstChild = element.firstElementChild;
+const lastChild = element.lastElementChild;
+const nextSibling = element.nextElementSibling;
+const prevSibling = element.previousElementSibling;
+
+// Closest ancestor matching selector
+const closestDiv = element.closest('div.ancestor');
+
+
