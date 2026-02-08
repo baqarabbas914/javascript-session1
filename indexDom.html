@@ -1,0 +1,1154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Learning Playground</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Reset & Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-color: #2563eb;
+        --secondary-color: #7c3aed;
+        --dark-color: #1e293b;
+        --light-color: #f8fafc;
+        --gray-color: #64748b;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --radius: 8px;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-color);
+        background-color: var(--light-color);
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      /* Navigation */
+      .navbar {
+        background-color: white;
+        box-shadow: var(--shadow);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .logo i {
+        color: var(--secondary-color);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--dark-color);
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: var(--primary-color);
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .btn {
+        padding: 0.6rem 1.2rem;
+        border-radius: var(--radius);
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-2px);
+      }
+
+      .btn-outline {
+        background-color: transparent;
+        border: 2px solid var(--primary-color);
+        color: var(--primary-color);
+      }
+
+      .btn-outline:hover {
+        background-color: var(--primary-color);
+        color: white;
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--dark-color);
+        cursor: pointer;
+      }
+
+      /* Hero Section */
+      .hero {
+        padding: 5rem 0;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--dark-color);
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        color: var(--gray-color);
+        max-width: 600px;
+        margin: 0 auto 2rem;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 3rem;
+      }
+
+      .code-display {
+        background-color: var(--dark-color);
+        color: #e2e8f0;
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        text-align: left;
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: "Courier New", monospace;
+        overflow-x: auto;
+      }
+
+      .code-comment {
+        color: #94a3b8;
+      }
+
+      .code-keyword {
+        color: #60a5fa;
+      }
+
+      .code-string {
+        color: #34d399;
+      }
+
+      /* Main Content */
+      .main-content {
+        padding: 4rem 0;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .section-title h2 {
+        font-size: 2.5rem;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .section-title p {
+        color: var(--gray-color);
+        font-size: 1.1rem;
+      }
+
+      .dom-examples {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+
+      .example-card {
+        background-color: white;
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s;
+      }
+
+      .example-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .example-card h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .example-card p {
+        margin-bottom: 1.5rem;
+        color: var(--gray-color);
+      }
+
+      .demo-area {
+        background-color: #f1f5f9;
+        padding: 1.5rem;
+        border-radius: var(--radius);
+        margin-bottom: 1.5rem;
+        min-height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .demo-controls {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      /* Interactive Section */
+      .interactive-area {
+        background-color: white;
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 4rem;
+      }
+
+      .color-picker {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .color-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .color-box:hover {
+        transform: scale(1.1);
+      }
+
+      .counter {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .counter-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        min-width: 60px;
+        text-align: center;
+      }
+
+      /* Form Section */
+      .form-section {
+        background-color: white;
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        margin-bottom: 4rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: 2px solid #e2e8f0;
+        border-radius: var(--radius);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      .form-result {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background-color: #f0f9ff;
+        border-radius: var(--radius);
+        display: none;
+      }
+
+      /* Footer */
+      .footer {
+        background-color: var(--dark-color);
+        color: white;
+        padding: 3rem 0;
+        text-align: center;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .footer-section h3 {
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-section a {
+        color: #cbd5e1;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+
+      .social-icons a {
+        color: white;
+        font-size: 1.5rem;
+        transition: color 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: var(--primary-color);
+      }
+
+      .copyright {
+        padding-top: 2rem;
+        border-top: 1px solid #334155;
+        color: #94a3b8;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block;
+        }
+
+        .nav-links {
+          position: fixed;
+          top: 70px;
+          left: 0;
+          width: 100%;
+          background-color: white;
+          flex-direction: column;
+          padding: 2rem;
+          box-shadow: var(--shadow);
+          transform: translateY(-100%);
+          opacity: 0;
+          transition: all 0.3s;
+          z-index: 999;
+        }
+
+        .nav-links.active {
+          transform: translateY(0);
+          opacity: 1;
+        }
+
+        .nav-buttons {
+          display: none;
+        }
+
+        .hero h1 {
+          font-size: 2.2rem;
+        }
+
+        .hero-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 250px;
+        }
+
+        .footer-content {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+
+        .section-title h2 {
+          font-size: 2rem;
+        }
+
+        .example-card {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container nav-container">
+        <a href="#" class="logo">
+          <i class="fas fa-code"></i> DOM Playground
+        </a>
+
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#examples">Examples</a></li>
+          <li><a href="#interactive">Interactive</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-buttons">
+          <button class="btn btn-outline" id="themeToggle">
+            <i class="fas fa-moon"></i> Theme
+          </button>
+          <button class="btn btn-primary" id="signUpBtn">
+            <i class="fas fa-user-plus"></i> Sign Up
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="container">
+        <h1>Learn DOM Manipulation Hands-On</h1>
+        <p>
+          Interactive playground to master JavaScript DOM manipulation with
+          real-time examples. Edit, experiment, and see results instantly!
+        </p>
+
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="startLearning">
+            <i class="fas fa-play-circle"></i> Start Learning
+          </button>
+          <button class="btn btn-outline" id="viewExamples">
+            <i class="fas fa-eye"></i> View Examples
+          </button>
+        </div>
+
+        <div class="code-display">
+          <pre><code><span class="code-comment">// Example: Changing text content</span>
+<span class="code-keyword">const</span> element = <span class="code-string">document</span>.getElementById(<span class="code-string">'myElement'</span>);
+element<span class="code-string">.textContent</span> = <span class="code-string">'Hello DOM!'</span>;
+element<span class="code-string">.style</span>.color = <span class="code-string">'blue'</span>;
+element<span class="code-string">.classList</span>.add(<span class="code-string">'active'</span>);</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- DOM Examples Section -->
+        <section id="examples">
+          <div class="section-title">
+            <h2>DOM Manipulation Examples</h2>
+            <p>Try these interactive examples to understand core concepts</p>
+          </div>
+
+          <div class="dom-examples">
+            <!-- Example 1: Text Manipulation -->
+            <div class="example-card">
+              <h3><i class="fas fa-font"></i> Text Manipulation</h3>
+              <p>Change text content and styling dynamically</p>
+
+              <div class="demo-area" id="textDemo">
+                <h4 id="changeableText">Click buttons to change me!</h4>
+                <p id="colorStatus">Current color: Black</p>
+              </div>
+
+              <div class="demo-controls">
+                <button class="btn btn-primary" id="changeText">
+                  Change Text
+                </button>
+                <button class="btn btn-outline" id="changeColor">
+                  Blue Text
+                </button>
+                <button class="btn btn-outline" id="toggleBold">
+                  Toggle Bold
+                </button>
+                <button class="btn" id="resetText">Reset</button>
+              </div>
+            </div>
+
+            <!-- Example 2: Element Creation -->
+            <div class="example-card">
+              <h3><i class="fas fa-plus-circle"></i> Create Elements</h3>
+              <p>Dynamically add and remove elements from the page</p>
+
+              <div class="demo-area" id="elementDemo">
+                <p>Items will appear here:</p>
+              </div>
+
+              <div class="demo-controls">
+                <button class="btn btn-primary" id="addItem">
+                  Add New Item
+                </button>
+                <button class="btn btn-outline" id="removeItem">
+                  Remove Last Item
+                </button>
+                <button class="btn" id="clearAll">Clear All</button>
+              </div>
+
+              <div class="counter">
+                <span>Items count:</span>
+                <span class="counter-value" id="itemCount">0</span>
+              </div>
+            </div>
+
+            <!-- Example 3: Class Manipulation -->
+            <div class="example-card">
+              <h3><i class="fas fa-cogs"></i> Class Manipulation</h3>
+              <p>Add, remove, and toggle CSS classes dynamically</p>
+
+              <div class="demo-area">
+                <div id="classDemo" class="demo-box">
+                  Watch my styles change!
+                </div>
+              </div>
+
+              <div class="demo-controls">
+                <button class="btn btn-primary" id="addClass">
+                  Add Border
+                </button>
+                <button class="btn btn-outline" id="removeClass">
+                  Remove Shadow
+                </button>
+                <button class="btn" id="toggleClass">Toggle Background</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Interactive Section -->
+        <section id="interactive">
+          <div class="section-title">
+            <h2>Interactive Playground</h2>
+            <p>Experiment with different DOM manipulation techniques</p>
+          </div>
+
+          <div class="interactive-area">
+            <h3>Theme Color Picker</h3>
+            <p>Click on a color to change the theme primary color</p>
+
+            <div class="color-picker">
+              <div
+                class="color-box"
+                style="background-color: #2563eb"
+                data-color="#2563eb"
+              ></div>
+              <div
+                class="color-box"
+                style="background-color: #7c3aed"
+                data-color="#7c3aed"
+              ></div>
+              <div
+                class="color-box"
+                style="background-color: #10b981"
+                data-color="#10b981"
+              ></div>
+              <div
+                class="color-box"
+                style="background-color: #f59e0b"
+                data-color="#f59e0b"
+              ></div>
+              <div
+                class="color-box"
+                style="background-color: #ef4444"
+                data-color="#ef4444"
+              ></div>
+              <div
+                class="color-box"
+                style="background-color: #8b5cf6"
+                data-color="#8b5cf6"
+              ></div>
+            </div>
+
+            <div class="counter" style="margin-top: 2rem">
+              <button class="btn btn-outline" id="decrement">-</button>
+              <span class="counter-value" id="interactiveCounter">0</span>
+              <button class="btn btn-outline" id="increment">+</button>
+              <button class="btn" id="resetCounter">Reset</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section id="contact">
+          <div class="section-title">
+            <h2>Contact & Feedback</h2>
+            <p>Practice form handling with DOM manipulation</p>
+          </div>
+
+          <div class="form-section">
+            <form id="contactForm">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter your name" />
+                <small
+                  id="nameError"
+                  style="color: var(--danger-color); display: none"
+                ></small>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" />
+                <small
+                  id="emailError"
+                  style="color: var(--danger-color); display: none"
+                ></small>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea
+                  id="message"
+                  rows="4"
+                  placeholder="Enter your message"
+                ></textarea>
+                <small
+                  id="messageError"
+                  style="color: var(--danger-color); display: none"
+                ></small>
+              </div>
+
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Submit Form
+              </button>
+            </form>
+
+            <div class="form-result" id="formResult">
+              <h4>Form Submitted Successfully!</h4>
+              <p id="resultContent"></p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>DOM Playground</h3>
+            <p>
+              An interactive learning platform for mastering JavaScript DOM
+              manipulation through hands-on examples.
+            </p>
+            <div class="social-icons">
+              <a href="#"><i class="fab fa-github"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-linkedin"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#examples">Examples</a></li>
+              <li><a href="#interactive">Interactive</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h3>DOM Concepts</h3>
+            <ul>
+              <li><a href="#">Selecting Elements</a></li>
+              <li><a href="#">Modifying Content</a></li>
+              <li><a href="#">Event Handling</a></li>
+              <li><a href="#">Form Manipulation</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="copyright">
+          <p>
+            &copy; 2024 DOM Learning Playground. Created for educational
+            purposes. All DOM examples are interactive!
+          </p>
+          <p id="footerInfo">
+            Page loaded successfully. DOM is ready for manipulation!
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // DOM Content Loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM fully loaded and parsed");
+
+        // Update footer info
+        document.getElementById("footerInfo").textContent =
+          `Page loaded at ${new Date().toLocaleTimeString()}. DOM is ready!`;
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById("menuToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        menuToggle.addEventListener("click", function () {
+          navLinks.classList.toggle("active");
+          menuToggle.innerHTML = navLinks.classList.contains("active")
+            ? '<i class="fas fa-times"></i>'
+            : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll(".nav-links a").forEach((link) => {
+          link.addEventListener("click", () => {
+            navLinks.classList.remove("active");
+            menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+          });
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", function () {
+          document.body.classList.toggle("dark-theme");
+
+          if (document.body.classList.contains("dark-theme")) {
+            document.body.style.backgroundColor = "#1e293b";
+            document.body.style.color = "#f8fafc";
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light';
+          } else {
+            document.body.style.backgroundColor = "";
+            document.body.style.color = "";
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i> Theme';
+          }
+        });
+
+        // Sign Up Button
+        document
+          .getElementById("signUpBtn")
+          .addEventListener("click", function () {
+            this.innerHTML = '<i class="fas fa-check"></i> Signed Up!';
+            this.style.backgroundColor = "var(--success-color)";
+
+            // Create notification
+            const notification = document.createElement("div");
+            notification.textContent = "Successfully signed up!";
+            notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--success-color);
+                    color: white;
+                    padding: 1rem 2rem;
+                    border-radius: var(--radius);
+                    box-shadow: var(--shadow);
+                    z-index: 10000;
+                `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
+          });
+
+        // Hero Section Buttons
+        document
+          .getElementById("startLearning")
+          .addEventListener("click", function () {
+            document
+              .getElementById("examples")
+              .scrollIntoView({ behavior: "smooth" });
+          });
+
+        document
+          .getElementById("viewExamples")
+          .addEventListener("click", function () {
+            document
+              .getElementById("examples")
+              .scrollIntoView({ behavior: "smooth" });
+          });
+
+        // ===== EXAMPLE 1: Text Manipulation =====
+        const changeableText = document.getElementById("changeableText");
+        const colorStatus = document.getElementById("colorStatus");
+        let isBold = false;
+        let textColor = "black";
+
+        document
+          .getElementById("changeText")
+          .addEventListener("click", function () {
+            const texts = [
+              "DOM manipulation is fun!",
+              "JavaScript is powerful",
+              "You can change me dynamically",
+              "Text updated successfully!",
+              "Learning by doing is the best!",
+            ];
+            const randomText = texts[Math.floor(Math.random() * texts.length)];
+            changeableText.textContent = randomText;
+          });
+
+        document
+          .getElementById("changeColor")
+          .addEventListener("click", function () {
+            const colors = ["blue", "red", "green", "purple", "orange"];
+            const currentIndex = colors.indexOf(textColor);
+            const nextColor = colors[(currentIndex + 1) % colors.length];
+
+            changeableText.style.color = nextColor;
+            textColor = nextColor;
+            colorStatus.textContent = `Current color: ${nextColor.charAt(0).toUpperCase() + nextColor.slice(1)}`;
+            this.textContent = `${nextColor.charAt(0).toUpperCase() + nextColor.slice(1)} Text`;
+          });
+
+        document
+          .getElementById("toggleBold")
+          .addEventListener("click", function () {
+            isBold = !isBold;
+            changeableText.style.fontWeight = isBold ? "bold" : "normal";
+            this.textContent = isBold ? "Normal Text" : "Bold Text";
+          });
+
+        document
+          .getElementById("resetText")
+          .addEventListener("click", function () {
+            changeableText.textContent = "Click buttons to change me!";
+            changeableText.style.color = "black";
+            changeableText.style.fontWeight = "normal";
+            colorStatus.textContent = "Current color: Black";
+            document.getElementById("changeColor").textContent = "Blue Text";
+            document.getElementById("toggleBold").textContent = "Toggle Bold";
+            textColor = "black";
+            isBold = false;
+          });
+
+        // ===== EXAMPLE 2: Element Creation =====
+        const elementDemo = document.getElementById("elementDemo");
+        const itemCount = document.getElementById("itemCount");
+        let itemCounter = 0;
+
+        document
+          .getElementById("addItem")
+          .addEventListener("click", function () {
+            itemCounter++;
+            itemCount.textContent = itemCounter;
+
+            const newItem = document.createElement("div");
+            newItem.className = "demo-item";
+            newItem.style.cssText = `
+                    background: var(--primary-color);
+                    color: white;
+                    padding: 0.5rem 1rem;
+                    margin: 0.5rem 0;
+                    border-radius: var(--radius);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                `;
+
+            newItem.innerHTML = `
+                    <span>Item ${itemCounter} - Added ${new Date().toLocaleTimeString()}</span>
+                    <button class="delete-item-btn" style="background: white; color: var(--primary-color); border: none; padding: 0.2rem 0.6rem; border-radius: 4px; cursor: pointer;">X</button>
+                `;
+
+            // Add delete functionality to the button
+            newItem
+              .querySelector(".delete-item-btn")
+              .addEventListener("click", function () {
+                newItem.remove();
+                itemCounter--;
+                itemCount.textContent = itemCounter;
+              });
+
+            elementDemo.appendChild(newItem);
+          });
+
+        document
+          .getElementById("removeItem")
+          .addEventListener("click", function () {
+            const lastItem = elementDemo.querySelector(".demo-item:last-child");
+            if (lastItem) {
+              lastItem.remove();
+              itemCounter--;
+              itemCount.textContent = itemCounter;
+            }
+          });
+
+        document
+          .getElementById("clearAll")
+          .addEventListener("click", function () {
+            elementDemo
+              .querySelectorAll(".demo-item")
+              .forEach((item) => item.remove());
+            itemCounter = 0;
+            itemCount.textContent = itemCounter;
+          });
+
+        // ===== EXAMPLE 3: Class Manipulation =====
+        const classDemo = document.getElementById("classDemo");
+
+        document
+          .getElementById("addClass")
+          .addEventListener("click", function () {
+            classDemo.classList.add("has-border");
+            classDemo.style.border = "3px solid var(--primary-color)";
+            classDemo.style.padding = "1rem";
+          });
+
+        document
+          .getElementById("removeClass")
+          .addEventListener("click", function () {
+            classDemo.classList.remove("has-shadow");
+            classDemo.style.boxShadow = "none";
+          });
+
+        document
+          .getElementById("toggleClass")
+          .addEventListener("click", function () {
+            classDemo.classList.toggle("has-background");
+
+            if (classDemo.classList.contains("has-background")) {
+              classDemo.style.background =
+                "linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%)";
+              classDemo.style.color = "white";
+            } else {
+              classDemo.style.background = "";
+              classDemo.style.color = "";
+            }
+          });
+
+        // ===== INTERACTIVE SECTION =====
+        // Color Picker
+        document.querySelectorAll(".color-box").forEach((box) => {
+          box.addEventListener("click", function () {
+            const color = this.getAttribute("data-color");
+            document.documentElement.style.setProperty(
+              "--primary-color",
+              color,
+            );
+
+            // Update all primary buttons
+            document.querySelectorAll(".btn-primary").forEach((btn) => {
+              btn.style.backgroundColor = color;
+            });
+
+            // Update logo color
+            document.querySelector(".logo").style.color = color;
+          });
+        });
+
+        // Counter
+        const interactiveCounter =
+          document.getElementById("interactiveCounter");
+        let counterValue = 0;
+
+        document
+          .getElementById("increment")
+          .addEventListener("click", function () {
+            counterValue++;
+            interactiveCounter.textContent = counterValue;
+            updateCounterColor();
+          });
+
+        document
+          .getElementById("decrement")
+          .addEventListener("click", function () {
+            if (counterValue > 0) {
+              counterValue--;
+              interactiveCounter.textContent = counterValue;
+              updateCounterColor();
+            }
+          });
+
+        document
+          .getElementById("resetCounter")
+          .addEventListener("click", function () {
+            counterValue = 0;
+            interactiveCounter.textContent = counterValue;
+            updateCounterColor();
+          });
+
+        function updateCounterColor() {
+          if (counterValue > 10) {
+            interactiveCounter.style.color = "var(--success-color)";
+          } else if (counterValue > 5) {
+            interactiveCounter.style.color = "var(--warning-color)";
+          } else {
+            interactiveCounter.style.color = "var(--primary-color)";
+          }
+        }
+
+        // ===== FORM HANDLING =====
+        const contactForm = document.getElementById("contactForm");
+        const formResult = document.getElementById("formResult");
+        const resultContent = document.getElementById("resultContent");
+
+        contactForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Reset errors
+          document.querySelectorAll('[id$="Error"]').forEach((error) => {
+            error.style.display = "none";
+          });
+
+          // Get values
+          const name = document.getElementById("name").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const message = document.getElementById("message").value.trim();
+
+          let isValid = true;
+
+          // Validate name
+          if (!name) {
+            document.getElementById("nameError").textContent =
+              "Name is required";
+            document.getElementById("nameError").style.display = "block";
+            isValid = false;
+          }
+
+          // Validate email
+          if (!email) {
+            document.getElementById("emailError").textContent =
+              "Email is required";
+            document.getElementById("emailError").style.display = "block";
+            isValid = false;
+          } else if (!isValidEmail(email)) {
+            document.getElementById("emailError").textContent =
+              "Please enter a valid email";
+            document.getElementById("emailError").style.display = "block";
+            isValid = false;
+          }
+
+          // Validate message
+          if (!message) {
+            document.getElementById("messageError").textContent =
+              "Message is required";
+            document.getElementById("messageError").style.display = "block";
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Show result
+            resultContent.innerHTML = `
+                        <strong>Name:</strong> ${name}<br>
+                        <strong>Email:</strong> ${email}<br>
+                        <strong>Message:</strong> ${message}<br><br>
+                        <em>Form submitted at ${new Date().toLocaleTimeString()}</em>
+                    `;
+            formResult.style.display = "block";
+
+            // Reset form
+            contactForm.reset();
+
+            // Scroll to result
+            formResult.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        });
+
+        function isValidEmail(email) {
+          const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return re.test(email);
+        }
+
+        // Add some initial demo items
+        for (let i = 0; i < 3; i++) {
+          document.getElementById("addItem").click();
+        }
+      });
+    </script>
+  </body>
+</html>
